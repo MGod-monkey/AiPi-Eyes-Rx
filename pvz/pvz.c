@@ -318,9 +318,11 @@ void pvz_start()
 
         screen=lv_tileview_create(lv_scr_act());
         lv_obj_set_size(screen,480,320);
+		lv_obj_center(screen);
         lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
         map1=lv_img_create(screen);
 		lv_obj_set_size(map1,480,320);
+		lv_obj_center(screen);
 		lv_img_set_src(map1, &pvz_map_3);
 		lv_obj_clear_flag(map1, LV_OBJ_FLAG_SCROLLABLE);
 		lv_obj_add_event_cb(map1,map_click_cb,LV_EVENT_RELEASED,0);
