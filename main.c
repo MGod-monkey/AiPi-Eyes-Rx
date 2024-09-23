@@ -37,55 +37,17 @@
 #include "lv_port_indev.h"
 
 #include "demos/lv_demos.h"
-#include "pvz/pvz.h"
 
 #include "lcd.h"
 
-#if DEF_USER_ES8388_EN
-#include "es8388_task.h"
-#else
 #include "auadc.h"
 #include "audac.h"
-#endif
 
-#if DEF_NXP_EN
-#include "./demos/ai_lvgl/src/generated/gui_guider.h"
-#include "./demos/ai_lvgl/src/generated/events_init.h"
-lv_ui guider_ui;
-#else
-#include "demos/ai_lvgl/ui.h"
-#endif
 #include "usbh_core.h"	//usb
 
 #define button_PROCESS_STACK_SIZE  (1024)
 #define button_PROCESS_PRIORITY (14)
 static TaskHandle_t button_process_task_hd;
-
-// /* lvgl log cb */
-// void lv_log_print_g_cb(const char *buf)
-// {
-//     printf("[LVGL] %s", buf);
-// }
-
-// /**
-//  * Create a QR Code
-//  */
-// void lv_example_qrcode_1(void)
-// {
-//     lv_color_t bg_color = lv_palette_lighten(LV_PALETTE_LIGHT_BLUE, 5);
-//     lv_color_t fg_color = lv_palette_darken(LV_PALETTE_BLUE, 4);
-
-//     lv_obj_t *qr = lv_qrcode_create(lv_scr_act(), 150, fg_color, bg_color);
-
-//     /*Set data*/
-//     const char *data = "https://www.bouffalolab.com";
-//     lv_qrcode_update(qr, data, strlen(data));
-//     lv_obj_center(qr);
-
-//     /*Add a border with bg_color*/
-//     lv_obj_set_style_border_color(qr, bg_color, 0);
-//     lv_obj_set_style_border_width(qr, 5, 0);
-// }
 
 static void user_task(void *pvParameters)
 {
@@ -98,6 +60,7 @@ static void user_task(void *pvParameters)
         bflb_mtimer_delay_ms(1);
     }
 }
+
 static void button_process_task(void *param)
 {
     uint32_t press_10ms_cnt = 0;
@@ -121,20 +84,14 @@ static void button_process_task(void *param)
         if(1 == press_mode){
             press_mode = 0;
             printf("[key] key Press\r\n");
-#if DEF_USER_ES8388_EN
-            es8388_paly_en();
-#else
             record_play_on();
-#endif
         } else if (2 == press_mode) {
             press_mode = 0;
-#if (0 == DEF_USER_ES8388_EN)
             record_play_off();
-#endif
         }
 
-        vTaskDelay(10);
-    }
+            vTaskDelay(10);
+        }
 }
 
 int main(void)
@@ -146,30 +103,31 @@ int main(void)
     usbh_initialize();
 
     /* lvgl init */
-    // lv_log_register_print_cb(lv_log_print_g_cb);
     lv_init();
     lv_port_disp_init();
     lv_port_indev_init();
 
-    // test case
-    // lv_demo_benchmark();
-    // lv_demo_stress();
-    // lv_demo_widgets();
+    #if LV_USE_GAME_PVZ
+        pvz_start()
+    #endif
 
-#if DEF_NXP_EN
-	// setup_ui(&guider_ui);
-    // events_init(&guider_ui);
-    pvz_start();
-#else
-    ui_init();
-#endif
+    #if LV_USE_GAME_2048
+        // 2048_start();
+    #endif
 
-#if DEF_USER_ES8388_EN
-    /* i2s es8388 task start */
-    es8388_palyer_task();
-#else
+    #if LV_USE_GAME_YANG
+        yang_game();
+    #endif
+
+    #if LV_USE_GAME_XIAOXIAOLE
+        xiaoxiaole();
+    #endif
+
+    #if LV_USE_GAME_HUARONGDAO
+        huarongdao();
+    #endif
+
     audio_play_task_init();
-#endif
 
     xTaskCreate(user_task, (char *)"user_task", 2048, NULL, 3, NULL);
     xTaskCreate(button_process_task, (char *)"button_proc_task", button_PROCESS_STACK_SIZE, NULL, button_PROCESS_PRIORITY, &button_process_task_hd);
