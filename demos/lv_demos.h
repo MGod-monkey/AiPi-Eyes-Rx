@@ -20,10 +20,10 @@ extern "C" {
  *      DEFINES
  *********************/
 #define LV_USE_GAME_PVZ 0
-#define LV_USE_GAME_2048 0
-#define LV_USE_GAME_YANG 1
+// #define LV_USE_GAME_2048 0
+#define LV_USE_GAME_YANG 0
 #define LV_USE_GAME_XIAOXIAOLE 0
-#define LV_USE_GAME_HUARONGDAO 0
+#define LV_USE_GAME_HUARONGDAO 1
 
 /**********************
  *      TYPEDEFS

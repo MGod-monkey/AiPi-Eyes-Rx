@@ -139,7 +139,7 @@ LV_IMG_DECLARE(pre_img)
 
 void huarongdao()
 {
-	  
+
 		screen_ratio=(float)lv_disp_get_hor_res(lv_disp_get_default())/480;
 
 		lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);
@@ -152,7 +152,7 @@ void huarongdao()
 		bgmap=lv_img_create(screen1);
 		lv_img_set_src(bgmap, &bg_img);
 		lv_img_set_pivot(bgmap,0,0);
-		lv_img_set_zoom(bgmap,256*screen_ratio);
+		lv_img_set_zoom(bgmap,256*2);
 		lv_obj_clear_flag(bgmap, LV_OBJ_FLAG_SCROLLABLE);
 
 
@@ -171,22 +171,23 @@ void huarongdao()
 		step_lable=lv_label_create(screen1);
 		lv_label_set_text_fmt(step_lable, "STEP:%d",step_count);
 		lv_obj_set_style_text_color(step_lable,lv_color_hex(0xffffff),0);
-		lv_obj_set_align(step_lable,LV_ALIGN_TOP_MID);
-		
+		lv_obj_set_style_text_font(step_lable,&lv_font_montserrat_20,0);
+		lv_obj_align(step_lable,LV_ALIGN_TOP_MID, 0, 10);
 		
 
 		exit_btn=lv_img_create(screen1);
 		lv_img_set_src(exit_btn, &exit_img);
 		lv_obj_add_event_cb(exit_btn,exit_game_cb,LV_EVENT_CLICKED,0);
+		lv_obj_align(exit_btn,LV_ALIGN_TOP_LEFT, 20, 20);
 						
 		pre_btn=lv_img_create(screen1);
 		lv_img_set_src(pre_btn, &pre_img);
-		lv_obj_set_pos(pre_btn,lv_pct(80),lv_pct(10));
+		lv_obj_set_pos(pre_btn,lv_pct(75),lv_pct(30));
 		lv_obj_add_event_cb(pre_btn,pre_stage_cb,LV_EVENT_CLICKED,0);
 
 		next_btn=lv_img_create(screen1);
 		lv_img_set_src(next_btn, &next_img);
-		lv_obj_set_pos(next_btn,lv_pct(80),lv_pct(40));
+		lv_obj_set_pos(next_btn,lv_pct(75),lv_pct(60));
 		lv_obj_add_event_cb(next_btn,next_stage_cb,LV_EVENT_CLICKED,0);
 
 		game_stage_init(0);

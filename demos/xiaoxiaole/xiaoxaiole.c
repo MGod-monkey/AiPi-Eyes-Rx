@@ -67,8 +67,8 @@ LV_IMG_DECLARE(coin_img)
 
 void xiaoxiaole()
 {
-	  if(lv_disp_get_hor_res(lv_disp_get_default())>=lv_disp_get_ver_res(lv_disp_get_default()))
-		{screen_ratio=(float)lv_disp_get_ver_res(lv_disp_get_default())/320;}
+	if(lv_disp_get_hor_res(lv_disp_get_default())>=lv_disp_get_ver_res(lv_disp_get_default()))
+		{screen_ratio=(float)lv_disp_get_ver_res(lv_disp_get_default())/400;}
 		else
 		{
 			screen_ratio=(float)lv_disp_get_hor_res(lv_disp_get_default())/480;
@@ -84,7 +84,7 @@ void xiaoxiaole()
 		bgmap=lv_img_create(screen1);//如果很卡的话，把这个背景图片删掉
 		lv_img_set_src(bgmap, &xiaoxiaole_bg_img);
 		lv_img_set_pivot(bgmap,0,0);
-		lv_img_set_zoom(bgmap,256*screen_ratio*1.2);
+		lv_img_set_zoom(bgmap,256*1.5*1.2);
 		lv_obj_clear_flag(bgmap, LV_OBJ_FLAG_SCROLLABLE);
 		///////////////////////////////////////////////////////////////////////////////////
 
@@ -99,25 +99,31 @@ void xiaoxiaole()
 			
 		refs_btn=lv_img_create(screen1);
 		lv_img_set_src(refs_btn, &refs_btn_img);
-		lv_obj_set_align(refs_btn,LV_ALIGN_RIGHT_MID);
+		// lv_obj_set_align(refs_btn,LV_ALIGN_RIGHT_MID);
+		lv_obj_align(refs_btn,LV_ALIGN_RIGHT_MID,8,0);
 		lv_obj_add_flag(refs_btn, LV_OBJ_FLAG_CLICKABLE);
 		lv_obj_add_event_cb(refs_btn,map_refs,LV_EVENT_CLICKED,0);
+		lv_img_set_zoom(refs_btn, 150);
 
 		exit_btn=lv_img_create(screen1);
 		lv_img_set_src(exit_btn, &exit_img);
-		lv_obj_set_align(exit_btn,LV_ALIGN_TOP_RIGHT);
+		lv_obj_align(exit_btn,LV_ALIGN_TOP_RIGHT,10,-20);
+		// lv_obj_set_align(exit_btn,LV_ALIGN_TOP_RIGHT);
 		lv_obj_add_flag(exit_btn, LV_OBJ_FLAG_CLICKABLE);
 		lv_obj_add_event_cb(exit_btn,exit_game_cb,LV_EVENT_CLICKED,0);
+		lv_img_set_zoom(exit_btn, 130);
 
 		coin=lv_img_create(screen1);
 		lv_img_set_src(coin, &coin_img);
+		lv_img_set_zoom(coin, 130);
+		lv_obj_align(coin,LV_ALIGN_TOP_LEFT,10,-20);
 		
 		score=0;
 		
 		score_lable=lv_label_create(screen1);
 		lv_label_set_text_fmt(score_lable,"SCORE:%d",score);
-		lv_obj_set_style_text_font(score_lable,&lv_font_montserrat_22,0);
-		lv_obj_set_y(score_lable,90);
+		lv_obj_set_style_text_font(score_lable,&lv_font_montserrat_20,0);
+		lv_obj_set_y(score_lable,40);
 		lv_obj_set_style_text_color(score_lable, lv_color_hex(0x00aaff), LV_PART_MAIN);
 		
 		game_init();

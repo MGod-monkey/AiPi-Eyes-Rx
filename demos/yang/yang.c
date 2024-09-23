@@ -10,17 +10,17 @@
 #define  max_layer    4
 #define  layer_row_count  8
 #define  layer_col_count  6
-#define  mid_x_start  230
+#define  mid_x_start  78
 #define  mid_y_start  20
 #define  card_width   40
 #define  card_height   50
-#define  left_x_start  190
-#define  right_x_start  570
+#define  left_x_start  54
+#define  right_x_start  282
 #define  left_y_start  150
 #define  right_y_start  150
 #define  left_y_distance 5
 #define  right_y_distance 5
-#define  bottom_start_x  256
+#define  bottom_start_x  94
 #define  bottom_start_y  395
 
 LV_IMG_DECLARE(grass2_img)
@@ -100,7 +100,7 @@ void yang_game()
         lv_memset_00(bottom_card,sizeof(bottom_card));
 
         screen=lv_tileview_create(lv_scr_act());
-        lv_obj_set_size(screen,800,480);
+        lv_obj_set_size(screen,480,480);
         lv_obj_set_style_bg_color(screen,lv_color_hex(0xcdfd8b),0);
         lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -108,7 +108,7 @@ void yang_game()
         {
            lv_obj_t * g=lv_img_create(screen);
            lv_img_set_src(g,grass_img[rand()%2]);
-           lv_obj_set_pos(g,rand()%750,rand()%450);
+           lv_obj_set_pos(g,rand()%450,rand()%450);
         }
 
         dock=lv_img_create(screen);
