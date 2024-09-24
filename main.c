@@ -40,8 +40,12 @@
 
 #include "lcd.h"
 
-#include "auadc.h"
-#include "audac.h"
+#if DEF_USER_ES8388_EN
+    #include "es8388_task.h"
+#else
+    #include "auadc.h"
+    #include "audac.h"
+#endif
 
 #include "usbh_core.h"	//usb
 
@@ -59,39 +63,6 @@ static void user_task(void *pvParameters)
         lv_task_handler();
         bflb_mtimer_delay_ms(1);
     }
-}
-
-static void button_process_task(void *param)
-{
-    uint32_t press_10ms_cnt = 0;
-    uint32_t press_mode = 0;
-    struct bflb_device_s *gpio = bflb_device_get_by_name("gpio");
-    bflb_gpio_init(gpio, GPIO_PIN_2, GPIO_INPUT | GPIO_FLOAT | GPIO_SMT_EN | GPIO_DRV_0);
-    while(1){
-        if(bflb_gpio_read(gpio, GPIO_PIN_2) == 1) {
-            press_10ms_cnt++;
-        }
-        else if(bflb_gpio_read(gpio, GPIO_PIN_2) == 0){
-            if(press_10ms_cnt > 10 && press_10ms_cnt < 100){
-                press_mode = 1;
-            }
-            else if(press_10ms_cnt > 100){
-                press_mode = 2;
-            }
-            press_10ms_cnt = 0;
-        }
-
-        if(1 == press_mode){
-            press_mode = 0;
-            printf("[key] key Press\r\n");
-            record_play_on();
-        } else if (2 == press_mode) {
-            press_mode = 0;
-            record_play_off();
-        }
-
-            vTaskDelay(10);
-        }
 }
 
 int main(void)
@@ -127,10 +98,14 @@ int main(void)
         huarongdao();
     #endif
 
-    audio_play_task_init();
+    #if DEF_USER_ES8388_EN
+        /* i2s es8388 task start */
+        es8388_palyer_task();
+    #else
+        audio_play_task_init();
+    #endif
 
     xTaskCreate(user_task, (char *)"user_task", 2048, NULL, 3, NULL);
-    xTaskCreate(button_process_task, (char *)"button_proc_task", button_PROCESS_STACK_SIZE, NULL, button_PROCESS_PRIORITY, &button_process_task_hd);
 
     /* freeRTOS start */
     vTaskStartScheduler();
